@@ -12,150 +12,149 @@ import turtle, copy
 t = turtle.Turtle()
 # background = turtle.Screen()
 # background = t.screen.getcanvas()
-cavset = t.screen.getcanvas()
 turtle.tracer(0, 0)
-print(t.screen.screensize())
-t.screen.setworldcoordinates(urx=1000,ury=1000, llx=0, lly=0)
 
-COLN, ROWN = 10, 10
-point_A = None
-point_B = None
-turn = None
+class Dots_and_Boxes:
+    def __init__(self, t):
+        self.t = t
+        t.screen.setworldcoordinates(urx=1000,ury=1000, llx=0, lly=0)
+        self.COLN, self.ROWN = 10, 10
+        self.GAP = 100
+        self.point_A = None
+        self.point_B = None
+        self.turn = True
+        self.colors = {True: "red",
+                       False: "blue"}
 
-def create_grid(COLN, ROWN, gap):
-    grid = list()
-    for c in range(COLN):
-        for r in range(ROWN):
-            grid.append([c * gap, r * gap])
-    return grid
+        self.grid = self.create_grid()
+        self.valid_options = self.get_valid_lines()
+        self.User_scores = {
+            False: [],
+            True: []
+        }
 
-def get_valid_lines(grid):
-    lines = list()
-    for x, y in grid:
-        for x1, y1 in grid:
-            if abs(x - x1) == 100 and y == y1 and x1 > x:
-                if [(x, y), (x1, y1)] not in lines :
-                    lines.append([(x, y), (x1, y1)])
-            elif abs(y - y1) == 100 and x == x1 and y1 > y:
-                if [(x, y), (x1, y1)] not in lines:
-                    lines.append([(x, y), (x1, y1)])
-    return lines
+    def new_turn(self):  # Occurs at the end of turn.
+        self.turn = not self.turn  # New turn
+        self.current_color = self.colors[self.turn]  # Information reflects new turn
+        t.color(self.current_color)  # Sets new color.
 
-def f(x, y):
-    global col
-    print(round(x), round(y))
+    def create_grid(self):
+        grid = list()
+        for c in range(self.COLN):
+            for r in range(self.ROWN):
+                grid.append([c * self.GAP, r * self.GAP])
+        return grid
+        # return grid
 
-    t.down()
-    t.goto(x, y)
-    t.up()
+    def get_valid_lines(self):
+        lines = list()
+        for x, y in self.grid:
+            for x1, y1 in self.grid:
+                if abs(x - x1) == 100 and y == y1 and x1 > x:
+                    if [(x, y), (x1, y1)] not in lines :
+                        lines.append([[x, y], [x1, y1]])
+                elif abs(y - y1) == 100 and x == x1 and y1 > y:
+                    if [(x, y), (x1, y1)] not in lines:
+                        lines.append([[x, y], [x1, y1]])
+        return lines
 
-def get_dot_index(x, y):
-    global grid
-    # print(x, y)
-    x = round(x//100)
-    y = round(y//100)
-    # print(x, y)
-    index = int(f"{x}{y}")
-    # print(index)
-    return index
-    # t.goto(min(grid, lambda a: abs(a - (x, y))))
+    def f(x, y):
+        global col
+        print(round(x), round(y))
 
-def create_dots(turtle):
-    for index, l in enumerate(grid):
-        turtle.up()
-        turtle.goto(l[0], l[1])
-        turtle.dot()
-        print(index)
-        turtle.write(index)
-        # if (index + 1) % 10 == 0 and index != 0:
-        #     t.write(int((index + 1) / 10))
-
-def draw_all_Lines(turtle):
-    #  SHOWS LINE GENERATION
-    turtle.color("red")
-    turtle.screen.tracer(1, 2)
-    turtle.screen.tracer(1, 0)
-    turtle.speed(1)
-    for i in lines:
-        turtle.up()
-        turtle.goto(i[0])
-        turtle.down()
-        turtle.goto(i[1])
-        print(i)
-
-def release_input(event):
-    # print(event)
-    # print(event.state)
-    # Mouse left-key.
-    if event.num == 1:
-        # print(event)
-        return [event.x, event.y]
-    
-def set_Point(x, y):
-    global grid, lines, point_A, point_B
-
-    # print(x, y)
-    index = get_dot_index(x, y)
-    if index <= len(grid):
-        print(f"{index} found in grid.")
-
-        if point_B != None and point_A != None:
-            point_A, point_B = None, None
-        if point_A == None:
-            point_A = grid[index]
-            print(f"set_pointA: {point_A}")
-        elif point_B == None:
-            point_B = grid[index]
-            print(f"set_pointB: {point_B}")
-    # print("HERE:", point_A, point_B)
-    
-# def set_PointA(x, y):
-#     global grid, lines, point_A
-
-#     # print(x, y)
-#     index = get_dot_index(x, y)
-#     if index <= len(grid):
-#         print(f"{index} found in grid.")
-    
-#     point_A = grid[index]
-#     print(f"set_pointA: {point_A}")
-
-# def set_PointB(x, y):
-#     global grid, lines, point_B
-
-#     t.ondrag(0)
-#     t.goto(x, y)
-    
-#     print(x, y)
-#     index = get_dot_index(x, y)
-#     print(index)
-
-#     t.ondrag(set_PointB)
-#     # if index <= len(grid):
-#     #     print(f"{index} found in grid.")
-
-#     # point_B = grid[index]
-#     # print(f"set_pointA: {point_B}")
-#     # draw_line()
-def correct_points():
-    global point_A, point_B
-    #  Sorts point A and point B order, so that it can be found in the array
-    if point_A[0] > point_B[0] or point_A[1] > point_B[1]:
-        point_A, point_B = point_B, point_A
-
-def draw_line(x, y, valid_options):
-    # x, y = event.x, event.y
-    set_Point(x, y)
-    correct_points()
-    if [point_A, point_B] in valid_options:
-        print(True)
-    if point_A != None and point_B != None:
-        t.up()
-        t.goto(point_A)
         t.down()
-        t.goto(point_B)
+        t.goto(x, y)
         t.up()
-        print("Done")
+
+    def get_dot_index(self, x, y):
+        # print(x, y)
+        x = round(x//100)
+        y = round(y//100)
+        # print(x, y)
+        index = int(f"{x}{y}")
+        # print(index)
+        return index
+        # t.goto(min(grid, lambda a: abs(a - (x, y))))
+
+    def create_dots(self):
+        #  Creates dots.
+        for index, l in enumerate(self.grid):
+            self.t.up()
+            self.t.goto(l[0], l[1])
+            self.t.dot()
+            print(index)
+            self.t.write(index)
+
+        #  Changes from black to user turn colors.
+        t.color(self.colors[self.turn])
+            # if (index + 1) % 10 == 0 and index != 0:
+            #     t.write(int((index + 1) / 10))
+
+    def draw_all_Lines(self):
+        #  SHOWS LINE GENERATION
+        lines = self.get_valid_lines()
+        self.t.color("red")
+        self.t.screen.tracer(1, 2)
+        self.t.screen.tracer(1, 0)
+        self.t.speed(1)
+        for i in lines:
+            self.t.up()
+            self.t.goto(i[0])
+            self.t.down()
+            self.t.goto(i[1])
+            print(i)
+
+    def release_input(event):
+        # print(event)
+        # print(event.state)
+        # Mouse left-key.
+        if event.num == 1:
+            # print(event)
+            return [event.x, event.y]
+        
+    def set_Point(self, x, y):
+        # print(x, y)
+        index = self.get_dot_index(x, y)  # Gets the index.
+        if index <= len(self.grid):
+            print(f"{index} found in grid.")
+
+            # Sets the location. Alternate method: Use just the index, instead of the value.
+            if self.point_B != None and self.point_A != None:
+                self.point_A, self.point_B = None, None
+            if self.point_A == None:
+                self.point_A = self.grid[index]
+                # print(f"set_pointA: {self.point_A}")
+            elif self.point_B == None:
+                self.point_B = self.grid[index]
+                # print(f"set_pointB: {self.point_B}")
+        # print("HERE:", point_A, point_B)
+        
+    def correct_points(self):
+        #  Sorts point A and point B order, so that it can be found in the array
+        # print("Here", self.point_B[0])
+        if (self.point_A[0] > self.point_B[0]) or (self.point_A[1] > self.point_B[1]):
+            self.point_A, self.point_B = self.point_B, self.point_A
+
+    def draw_line(self, x, y):
+        # x, y = event.x, event.y
+        self.set_Point(x, y)
+        self.t.color
+        
+        if self.point_A != None and self.point_B != None:  #  Both locations must be set.
+            self.correct_points()
+            if [self.point_A, self.point_B] in self.valid_options:  # Must be a valid location.
+                self.valid_options.remove([self.point_A, self.point_B])
+                print(True)
+                t.up()
+                t.goto(self.point_A)
+                t.down()
+                t.goto(self.point_B)
+                t.up()
+                self.new_turn()
+                # print("Done")
+            else:
+                print([self.point_A, self.point_B])
+                print(self.valid_options)
 
 
 #  Check whether dots are near
@@ -166,19 +165,20 @@ def draw_line(x, y, valid_options):
 #  Who filled in the last line.
 
 #  Adds box to user score.
-User_scores = {
-    False: [],
-    True: []
-}
 
-grid = create_grid(COLN, ROWN, 100)
-lines = get_valid_lines(grid)
-valid_lines = copy.deepcopy(lines)
+game = Dots_and_Boxes(t)
+game.create_grid()
+game.create_dots()
 
+game.t.screen.onclick(game.draw_line)
 
-create_dots(t)
-print(grid)
-t.screen.onclick(draw_line)
+t.screen.mainloop()
+
+# lines = game.get_valid_lines(grid)
+# valid_lines = copy.deepcopy(lines)
+# game.create_dots(t)
+# print(grid)
+# t.screen.onclick(game.draw_line)
 
 
 
