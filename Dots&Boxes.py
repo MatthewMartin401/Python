@@ -51,7 +51,7 @@ class Dots_and_Boxes:
         self.h.color("black")
         self.h.up()
         self.h.goto(0, 950)
-        self.h.write(f"{str(self.colors[True]).title()}: {len(self.User_scores[True])} {str(self.colors[False]).title()}: {len(self.User_scores[False])}", font=("Ariel", 20, "normal"))
+        self.h.write(f"{str(self.colors[True]).title()}: {len(self.User_scores[True])} {str(self.colors[False]).title()}: {len(self.User_scores[False])} | Turn : {str(self.colors[self.turn]).title()}", font=("Ariel", 20, "normal"))
     
     def main(self):
         self.t.clear()
@@ -256,9 +256,10 @@ class Dots_and_Boxes:
 
                 #  Info
                 print(len(self.valid_options))
-                self.update_hud()
+                self.update_hud()  # Updates score
                 if len(self.User_scores[self.turn]) == score:  # Only starts new turn, if user score didnt increase.
                     self.new_turn()
+                    self.update_hud()  # Updates turn
                     
                 
         #  Checks if the game is over.
