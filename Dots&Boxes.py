@@ -127,14 +127,14 @@ class Dots_and_Boxes:
         return boxes
 
     def get_dot_index(self, x, y):
-        print(x, y)
-        
+        # print(x, y)
+        # print((int(x // self.GAP) * self.GAP) + (self.GAP / 2), (int(y // self.GAP) * self.GAP) + (self.GAP / 2))
+
         # Round x up condition
-        print((int(x // self.GAP) * self.GAP) + (self.GAP / 2), (int(y // self.GAP) * self.GAP) + (self.GAP / 2))
         if x >= (int(x // self.GAP) * self.GAP) + (self.GAP / 2):
             x = (ceil(x / 100) * 100) // self.GAP
             print("ceil: ", x)
-        else:#
+        else:
             x = int(x // self.GAP)  # Rounds down.
         
         # Round y up condition
@@ -152,6 +152,7 @@ class Dots_and_Boxes:
         #  Works as long as its 10 x 10 dots.
         # index = int(f"{x}{y}")
 
+        #  Stops it from going over index number.
         if (y + 1) <= self.ROWN:
             index = (self.ROWN * x)+ y  # Number of rows multiplied by grid index. Plus y (y is the height on the grid.)
             # print("coln * x: ", self.COLN * x, "y :", y)
@@ -170,7 +171,9 @@ class Dots_and_Boxes:
         self.t.up()
         self.t.goto(-20, -20)
         self.t.down()
-        for i in [[-20, -20], [((self.ROWN - 1)* self.GAP) + 20, -20], [((self.ROWN - 1) * self.GAP) + 20, ((self.COLN - 1) * self.GAP) + 20], [-20, ((self.COLN - 1) * self.GAP) + 20], [-20, -20]]:
+
+        #  Creates outline for dot grid
+        for i in [[-20, -20], [((self.COLN - 1)* self.GAP) + 20, -20], [((self.COLN - 1) * self.GAP) + 20, ((self.ROWN - 1) * self.GAP) + 20], [-20, ((self.ROWN - 1) * self.GAP) + 20], [-20, -20]]:
             self.t.goto(i)    
         
         self.t.up()
