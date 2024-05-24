@@ -23,40 +23,40 @@ class appwindow():
         self.height = height
         self.width = width
         self.color1 = "red"
-        self.color2 = "white"
-        self.color3 = "green"
-        self.color4 = "blue"
+        self.color2 = "lightgrey"
+        self.color3 = "black"
+        self.color4 = "black"
 
         #WINDOW
         win = root
         win.geometry(f"{self.width}x{self.height}")
         win.configure(bg = 'grey')
-        win.title("window test")
+        win.title("Journal App")
         win.resizable(height = False, width = False)#Window is not resizable.
 
         #Low FRAME
 
         l_frame = Frame(win,
                        bg = self.color3,
-                       height = self.w_percentage_H(20),
+                       height = self.w_percentage_H(10),
                        width = self.w_percentage_W(100))
-        l_frame.place(y = self.w_percentage_H(80), x = self.w_percentage_W(0))
+        l_frame.place(y = self.w_percentage_H(90), x = self.w_percentage_W(0))
 
         #TOP FRAME
 
         t_frame= Frame(win,
                        bg = self.color4,
-                       height = self.w_percentage_H(20),
+                       height = self.w_percentage_H(10),
                        width = self.w_percentage_W(100))
         t_frame.place(y = self.w_percentage_H(0), x = self.w_percentage_W(0)) #0,0
 
             #Heading
-        t_lab=Label(t_frame,
-                  bg="black",
-                  fg= self.color2,
-                  font='80',
-                  text="Write Document")
-        t_lab.place(relx = 0.5, rely = 0, anchor = "n")
+        # t_lab=Label(t_frame,
+        #           bg="black",
+        #           fg= self.color2,
+        #           font='80',
+        #           text="Write Document")
+        # t_lab.place(relx = 0.5, rely = 0, anchor = "n")
 
             #Date Time Name Generation
         self.t_Ent= Entry(t_frame,
@@ -83,10 +83,10 @@ class appwindow():
 
         #CENTRE FRAME
         centre = Frame(win,
-                       bg = self.color1,
-                       height = self.w_percentage_H(60),
+                       bg = self.color2,
+                       height = self.w_percentage_H(80),
                        width = self.w_percentage_W(100))
-        centre.place(y = self.w_percentage_H(20), x = self.w_percentage_W(0))
+        centre.place(y = self.w_percentage_H(10), x = self.w_percentage_W(0))
 
         #Centre Text
         self.c_text= Text(centre,
@@ -104,7 +104,7 @@ class appwindow():
                 text="Clear",
                 bg=self.color1,
                 command = self.clear)
-        l_btn1.place(relx = 0.05, rely = 0.5, anchor = "sw")
+        l_btn1.place(relx = 0.05, rely = 0.8, anchor = "sw")
 
             #Save Buttons
                 #btn1 - Save File.
