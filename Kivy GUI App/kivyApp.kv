@@ -1,0 +1,24 @@
+#:kivy 1.11.1
+
+<LogScreen>:
+    canvas:
+        Color: 
+            rgba: 1, 0, 1, 1
+        
+    FloatLayout:
+        pos: 0, 0
+        size: root.width, root.height
+        GridLayout:
+            Label:
+                text: "User"
+            TextInput:
+                multiline: False
+            Label:
+                text: "Password"
+            TextInput:
+                password: True
+                multiline: False
+            Button:
+                text: "Log in"
+            Button:
+                text: "Create Account"
